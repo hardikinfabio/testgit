@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation, useParams } from 'react-router-dom';
 import { Menu, X, ArrowRight, ChevronLeft, ChevronRight, User, PieChart, Shield, Zap, TrendingUp, Target, Lock, Activity, Eye, AlertCircle, CheckCircle2, Globe, Cpu, FileText, BarChart3, Fingerprint, Linkedin, Twitter, Instagram, Mail, MapPin } from 'lucide-react';
 
 const COLORS = {
@@ -10,6 +11,14 @@ const COLORS = {
   dark: '#1F2937',
   lightGray: '#E6E6E6',
   white: '#FFFFFF'
+};
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
 };
 
 const PlaceholderBox = ({ className = "", label = "Placeholder", icon: Icon, color = COLORS.purple }) => (
@@ -141,41 +150,131 @@ const HeroDashboard = () => {
   );
 };
 
-const App = () => {
-  const [activeCase, setActiveCase] = useState(0);
-
-  const caseStudies = [
-    {
-      client: "NEO-FINANCE GLOBAL",
-      title: "Neutralizing $4M Annual Ad Waste",
-      problem: "Massive bot-driven lead inflation causing sales team friction and budget drainage.",
-      solution: "Deployed MDS Bot-Shield and Neural Bidding to filter traffic at the pre-click layer.",
-      results: "+42% SQL quality improvement; -28% CPA within 60 days.",
-      accent: COLORS.purple,
-      image: "https://totempool.com/wp-content/uploads/2022/07/case-study_f4d16a7af18e4599d24d8120fd0d4c66_2000-930x620.jpg"
-    },
-    {
-      client: "AXON E-COMMERCE",
-      title: "Scaling Beyond the $50M Ceiling",
-      problem: "Plateaued ROAS due to cross-channel attribution blindness and audience saturation.",
-      solution: "Implemented MDS Attribution Engine to re-allocate spend toward high-LTV signals.",
-      results: "3.2x ROAS increase; Scaled monthly spend from $1.2M to $4.5M profitably.",
-      accent: COLORS.blue,
-      image: "https://graphicfolks.com/wp-content/uploads/2025/12/powerful-marketing-case-studies.jpg"
-    },
-    {
-      client: "QUANTUM SAAS",
-      title: "Winning the Bidding War",
-      problem: "Aggressive competitors driving up CPCs by 200% on core keyword clusters.",
-      solution: "MDS Stealth Bidding protocols used to capture low-intent volume the competition ignored.",
-      results: "-60% CPC reduction; 15% increase in market share dominance.",
-      accent: COLORS.teal,
-      image: "https://tse1.mm.bing.net/th/id/OIP.hFVZ7O3dgQ7km-T-OqV43QHaE8?rs=1&pid=ImgDetMain&o=7&rm=3"
-    }
+const MobileMenu = ({ isOpen, onClose }) => {
+  const links = [
+    { name: "Framework", href: "/" },
+    { name: "Intelligence", href: "/" },
+    { name: "Case Logs", href: "/" },
+    { name: "Services", sub: ["AI Media Buying", "SEO & Search", "Conversion Optimization", "Social Media", "Email Marketing", "Brand Protection"] },
+    { name: "Company", sub: ["About Us", "Case Studies", "Insights", "Careers", "Contact"] }
   ];
 
+  if (!isOpen) return null;
+
   return (
-    <div className="min-h-screen bg-white font-sans selection:text-white" style={{ color: COLORS.dark }}>
+    <div className="fixed inset-0 z-[100] bg-zinc-900 flex flex-col p-8 transition-all duration-500 animate-in fade-in slide-in-from-right overflow-y-auto">
+      <div className="flex justify-between items-center mb-12">
+        <img src="https://infabio.com/infabio-logo.png" alt="Infabio" className="h-10 object-contain invert" />
+        <button onClick={onClose} className="p-3 bg-zinc-800 rounded-full text-white hover:bg-zinc-700 transition-colors">
+          <X size={28} />
+        </button>
+      </div>
+
+      <div className="space-y-8 flex-1">
+        {links.map((link, i) => (
+          <div key={i} className="space-y-4">
+            {link.sub ? (
+              <>
+                <div className="text-[10px] font-black tracking-[0.4em] text-zinc-500 uppercase">{link.name}</div>
+                <div className="grid grid-cols-1 gap-4">
+                  {link.sub.map((sub, j) => (
+                    <Link 
+                      key={j} 
+                      to={`/service/${sub.toLowerCase().replace(/ /g, '-')}`} 
+                      onClick={onClose}
+                      className="text-2xl font-black text-white hover:text-teal-400 transition-colors"
+                    >
+                      {sub}
+                    </Link>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <Link 
+                to={link.href} 
+                onClick={onClose}
+                className="text-4xl font-black text-white hover:text-purple-400 tracking-tighter"
+              >
+                {link.name}
+              </Link>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-12 pt-8 border-t border-zinc-800">
+        <button className="w-full text-white py-5 rounded-2xl font-black text-sm tracking-widest uppercase bg-gradient-to-r from-purple-600 to-blue-600 shadow-2xl">
+          Get Free Audit
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const ServicePage = () => {
+  const { id } = useParams();
+  const title = id.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  
+  return (
+    <div className="pt-32 pb-20 px-8 max-w-[1400px] mx-auto min-h-screen">
+      <SectionLabel color={COLORS.blue}>Service Objective</SectionLabel>
+      <h1 className="text-6xl lg:text-8xl font-black leading-none tracking-tighter mb-12 uppercase" style={{ color: COLORS.dark }}>
+        {title} <span className="text-gradient-primary">Defense.</span>
+      </h1>
+      <div className="grid lg:grid-cols-2 gap-16">
+        <div className="space-y-8">
+          <p className="text-2xl text-zinc-500 font-medium leading-relaxed">
+            Advanced algorithmic {title.toLowerCase()} strategies designed to neutralize waste and hyperscale your winning signals in the most competitive environments.
+          </p>
+          <div className="grid gap-6">
+            {["Autonomous Optimization", "Fraud Neutralization", "Premium Attribution", "Predictive Signal Scaling"].map((feature, i) => (
+              <div key={i} className="flex items-center gap-4 p-6 rounded-2xl border border-zinc-100 bg-zinc-50/50">
+                <CheckCircle2 className="text-teal-500" size={24} />
+                <span className="font-bold text-zinc-700 tracking-wide">{feature}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="bg-zinc-900 rounded-[3rem] p-12 flex flex-col justify-center border border-zinc-800 shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500/10 blur-[80px] rounded-full"></div>
+          <SectionLabel color={COLORS.teal}>MDS Internal Intel</SectionLabel>
+          <h3 className="text-4xl font-black text-white mb-8 tracking-tighter">Ready to Deploy?</h3>
+          <p className="text-zinc-400 mb-10 text-lg leading-relaxed">Our clandestine unit of architects is ready to scan your infrastructure for {title.toLowerCase()} leakage.</p>
+          <button className="text-white px-10 py-5 font-black rounded-2xl text-sm tracking-widest uppercase self-start" style={{ backgroundColor: COLORS.purple }}>
+            Initiate Tactical Scan
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const CompanyPage = () => {
+  const { id } = useParams();
+  const title = id.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+
+  return (
+    <div className="pt-32 pb-20 px-8 max-w-[1000px] mx-auto min-h-screen">
+      <SectionLabel color={COLORS.purple}>Operational Intel</SectionLabel>
+      <h1 className="text-6xl lg:text-7xl font-black leading-tight tracking-tighter mb-10 uppercase" style={{ color: COLORS.dark }}>
+        The Infabio <span className="text-gradient-primary italic">{title}.</span>
+      </h1>
+      <div className="prose prose-xl text-zinc-500 font-medium leading-relaxed space-y-8">
+        <p>
+          Infabio is not just a marketing agency; it is a defensive layer for elite brands. We operate in the shadows of the ad platforms, detecting and neutralizing inefficiencies that cost brands millions.
+        </p>
+        <div className="p-10 rounded-[3rem] bg-zinc-900 text-white border border-zinc-800 shadow-2xl">
+          <h2 className="text-4xl font-black mb-6 tracking-tighter" style={{ color: COLORS.teal }}>Our Mission.</h2>
+          <p className="text-zinc-400 text-lg">To provide performance marketing teams with a cybernetic shield that guarantees Every Dollar Defended, Every Lead Verified, and Every Signal Optimized.</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Home = ({ activeCase, setActiveCase, caseStudies }) => {
+  return (
+    <>
       <style>{`
         .selection\\:bg-purple-custom::selection { background-color: ${COLORS.purple}; }
         .bg-gradient-primary { background: linear-gradient(135deg, ${COLORS.purple}, ${COLORS.blue}); }
@@ -222,49 +321,6 @@ const App = () => {
           width: 100%;
         }
       `}</style>
-
-      {/* ANNOUNCEMENT BAR */}
-      <div className="text-white py-2.5 overflow-hidden flex items-center text-[10px] font-bold tracking-[0.2em] uppercase w-full" style={{ backgroundColor: COLORS.dark }}>
-        <div className="animate-scroll flex whitespace-nowrap min-w-max">
-          {[...Array(4)].map((_, i) => (
-            <div key={i} className="flex items-center gap-24 px-12">
-              <span className="opacity-70">ROAS PROTECTION: <span style={{ color: COLORS.teal }}>ACTIVE</span></span>
-              <span className="cursor-pointer hover:text-teal-400 transition-colors">SAVE YOUR AD BUDGET — NEUTRALIZE BOT FRAUD — GROW YOUR BUSINESS →</span>
-              <span className="opacity-70 flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-teal-500 animate-pulse"></div>
-                SYSTEM STATUS: OPTIMIZED
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* HEADER / NAVBAR */}
-      <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-zinc-100 px-8 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <img
-            src="https://infabio.com/infabio-logo.png"
-            alt="Infabio Logo"
-            className="h-10 md:h-12 object-contain"
-          />
-        </div>
-
-        <div className="flex items-center gap-8">
-          <nav className="hidden lg:flex items-center gap-8 text-[11px] font-bold tracking-widest text-zinc-400 uppercase">
-            <a href="#" className="hover:text-zinc-900 transition-colors">Framework</a>
-            <a href="#" className="hover:text-zinc-900 transition-colors">Intelligence</a>
-            <a href="#" className="hover:text-zinc-900 transition-colors">Case Logs</a>
-          </nav>
-          <div className="h-6 w-px bg-zinc-200 hidden md:block"></div>
-          <button className="text-white px-7 py-3 text-[11px] font-bold tracking-widest rounded-full shadow-lg hover:brightness-110 transition-all uppercase" style={{ backgroundColor: COLORS.purple }}>
-            Get Marketing Audit
-          </button>
-          <button className="p-2 text-zinc-400 hover:text-zinc-900">
-            <Menu size={24} />
-          </button>
-        </div>
-      </nav>
-
       {/* HERO SECTION */}
       <section className="relative pt-24 pb-32 px-8 max-w-[1400px] mx-auto">
         <div className="grid lg:grid-cols-12 gap-16 items-center">
@@ -289,7 +345,6 @@ const App = () => {
           <div className="lg:col-span-5 relative">
             <div className="absolute inset-0 blur-[120px] opacity-20" style={{ background: `radial-gradient(circle, ${COLORS.purple}, ${COLORS.blue})` }}></div>
             <HeroDashboard />
-            {/* Floating Metric Card */}
             <div className="absolute -bottom-8 -left-8 bg-white p-6 rounded-2xl shadow-2xl border border-zinc-100 flex items-center gap-4 z-20 hover:scale-105 transition-transform duration-300">
               <div className="w-12 h-12 rounded-lg flex items-center justify-center relative overflow-hidden group" style={{ backgroundColor: COLORS.teal + '15' }}>
                 <div className="absolute inset-0 bg-teal-400/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
@@ -329,7 +384,7 @@ const App = () => {
         </div>
       </section>
 
-      {/* PROBLEM SECTION: VULNERABILITY */}
+      {/* PROBLEM SECTION */}
       <section className="py-32 px-8" style={{ backgroundColor: COLORS.lightGray + '40' }}>
         <div className="max-w-[1400px] mx-auto">
           <div className="grid lg:grid-cols-2 gap-20 items-center mb-20">
@@ -369,7 +424,7 @@ const App = () => {
         </div>
       </section>
 
-      {/* FRAMEWORK: THE ENGINE */}
+      {/* FRAMEWORK SECTION */}
       <section className="py-32 text-white relative overflow-hidden" style={{ backgroundColor: COLORS.dark }}>
         <div className="absolute top-0 right-0 w-1/3 h-full opacity-10" style={{ background: `linear-gradient(to left, ${COLORS.blue}, transparent)` }}></div>
         <div className="max-w-[1400px] mx-auto px-8 relative z-10">
@@ -412,7 +467,7 @@ const App = () => {
         </div>
       </section>
 
-      {/* CASE STUDY SLIDER */}
+      {/* CASE STUDY SECTION */}
       <section className="py-32 px-8 bg-white overflow-hidden">
         <div className="max-w-[1400px] mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
@@ -432,41 +487,22 @@ const App = () => {
 
           <div className="bg-white border-2 border-zinc-100 rounded-[3rem] overflow-hidden shadow-2xl flex flex-col lg:flex-row min-h-[600px]">
             <div className="lg:w-1/2 relative bg-zinc-900 overflow-hidden group">
-              <img
-                src={caseStudies[activeCase].image}
-                alt={caseStudies[activeCase].title}
-                className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-[1.5s]"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-zinc-900/40 via-transparent to-transparent"></div>
-              <div className="absolute top-8 left-8 flex items-center gap-2 z-10 bg-black/40 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
+              <img src={caseStudies[activeCase].image} alt={caseStudies[activeCase].title} className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-[1.5s]" />
+              <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-zinc-900 to-transparent pointer-events-none"></div>
+              <div className="absolute top-8 left-8 flex items-center gap-2 z-10 bg-black/40 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 text-white text-[9px] font-black tracking-widest uppercase">
                 <div className="w-2 h-2 rounded-full animate-ping" style={{ backgroundColor: caseStudies[activeCase].accent }}></div>
-                <span className="text-[9px] font-black tracking-widest text-zinc-100 uppercase">Classified Report v4.0</span>
-              </div>
-              <div className="absolute bottom-10 left-10 right-10 flex justify-between z-10">
-                <div className="h-1 flex-1 mx-1 rounded-full transition-all duration-500" style={{ backgroundColor: activeCase === 0 ? caseStudies[activeCase].accent : 'rgba(255,255,255,0.2)' }}></div>
-                <div className="h-1 flex-1 mx-1 rounded-full transition-all duration-500" style={{ backgroundColor: activeCase === 1 ? caseStudies[activeCase].accent : 'rgba(255,255,255,0.2)' }}></div>
-                <div className="h-1 flex-1 mx-1 rounded-full transition-all duration-500" style={{ backgroundColor: activeCase === 2 ? caseStudies[activeCase].accent : 'rgba(255,255,255,0.2)' }}></div>
+                Classified Report v4.0
               </div>
             </div>
             <div className="lg:w-1/2 p-12 lg:p-20 flex flex-col justify-center">
               <div className="text-[10px] font-black tracking-[0.5em] text-zinc-400 mb-8 uppercase">CLIENT: {caseStudies[activeCase].client}</div>
-              <h3 className="text-4xl font-black mb-12 tracking-tighter leading-none" style={{ color: COLORS.dark }}>
-                {caseStudies[activeCase].title}
-              </h3>
-
+              <h3 className="text-4xl font-black mb-12 tracking-tighter leading-none">{caseStudies[activeCase].title}</h3>
               <div className="space-y-10 mb-16">
                 <div className="grid grid-cols-12 gap-6">
                   <div className="col-span-1 text-[9px] font-black text-zinc-300">01</div>
                   <div className="col-span-11">
                     <div className="text-[9px] font-black tracking-widest text-zinc-400 uppercase mb-2">Vulnerability</div>
                     <p className="text-sm text-zinc-600 font-medium leading-relaxed italic">"{caseStudies[activeCase].problem}"</p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-12 gap-6">
-                  <div className="col-span-1 text-[9px] font-black text-zinc-300">02</div>
-                  <div className="col-span-11">
-                    <div className="text-[9px] font-black tracking-widest text-zinc-400 uppercase mb-2">MDS Tactical Solution</div>
-                    <p className="text-sm text-zinc-600 font-medium leading-relaxed">{caseStudies[activeCase].solution}</p>
                   </div>
                 </div>
                 <div className="grid grid-cols-12 gap-6 p-6 rounded-2xl bg-zinc-50 border border-zinc-100">
@@ -488,150 +524,204 @@ const App = () => {
           <div className="max-w-2xl">
             <SectionLabel color={COLORS.teal}>Operational Intel</SectionLabel>
             <h2 className="text-5xl font-black tracking-tighter leading-none mb-6">THE SQUAD BEHIND THE SYSTEM.</h2>
-            <p className="text-xl text-zinc-500 font-medium">A clandestine unit of data scientists and media architects dedicated to your dominance.</p>
+            <p className="text-xl text-zinc-500 font-medium">A clandestine unit dedicated to your dominance.</p>
           </div>
         </div>
-
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-12">
-          {[
-            { name: "Anchal", role: "DEFENSE ARCHITECT", color: COLORS.purple },
-            { name: "Vikash", role: "INTEL COMMANDER", color: COLORS.blue },
-            { name: "OP", role: "AI ENGINEER", color: COLORS.teal },
-            { name: "Chhavi", role: "OPS DIRECTOR", color: COLORS.pink }
-          ].map((member, i) => (
+          {["Anchal", "Vikash", "OP", "Chhavi"].map((name, i) => (
             <div key={i} className="group cursor-crosshair">
-              <div className="relative mb-8 bg-zinc-50 rounded-[2rem] aspect-[4/5] overflow-hidden border border-zinc-100 transition-all group-hover:shadow-2xl">
-                <div className="absolute inset-0 flex items-center justify-center grayscale group-hover:grayscale-0 transition-all opacity-20 group-hover:opacity-40">
-                  <User size={100} />
-                </div>
-                <div className="absolute top-6 left-6 flex gap-1">
-                  <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: member.color }}></div>
-                  <div className="w-1.5 h-1.5 rounded-full bg-zinc-200"></div>
-                </div>
+              <div className="relative mb-8 bg-zinc-50 rounded-[2rem] aspect-[4/5] overflow-hidden border border-zinc-100 transition-all group-hover:shadow-2xl flex items-center justify-center opacity-40 grayscale group-hover:grayscale-0 group-hover:opacity-100">
+                 <User size={100} className="text-zinc-300" />
               </div>
-              <h4 className="text-xl font-black tracking-tight mb-1">{member.name}</h4>
-              <div className="text-[10px] font-bold tracking-[0.3em] uppercase mb-4" style={{ color: member.color }}>{member.role}</div>
-              <p className="text-sm text-zinc-500 leading-relaxed font-medium italic">"Deciphering market volatility with algorithmic precision."</p>
+              <h4 className="text-xl font-black tracking-tight mb-1 uppercase">{name}</h4>
+              <div className="text-[10px] font-bold tracking-[0.3em] uppercase mb-4 text-zinc-400">Tactical Specialist</div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* FINAL CALL TO ACTION */}
+      {/* CTA SECTION */}
       <section className="py-40 px-8 text-center relative overflow-hidden" style={{ backgroundColor: COLORS.dark }}>
-        <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none" style={{ background: `radial-gradient(circle at center, ${COLORS.blue}, transparent)` }}></div>
         <div className="max-w-4xl mx-auto relative z-10">
           <SectionLabel color={COLORS.teal}>Initiate Protocol</SectionLabel>
           <h2 className="text-6xl lg:text-[100px] font-black text-white mb-10 tracking-tighter leading-[0.85]">
             SECURE YOUR <span className="text-gradient-primary">MARKET SHARE.</span>
           </h2>
-          <p className="text-xl text-zinc-400 font-medium mb-16 max-w-2xl mx-auto leading-relaxed">
-            We are accepting limited scale-ready partners for our 2024 Defensive Audits. Enter your infrastructure for a system scan.
-          </p>
-          <div className="flex flex-col md:flex-row items-center justify-center gap-8">
-            <button className="text-white px-14 py-6 font-black rounded-2xl hover:scale-105 transition-transform text-lg shadow-2xl flex items-center gap-4" style={{ backgroundColor: COLORS.purple }}>
-              GET FREE AUDIT <Target size={24} />
-            </button>
-            <div className="text-zinc-500 text-[10px] font-bold tracking-[0.4em] flex items-center gap-3">
-              <Lock size={14} style={{ color: COLORS.teal }} /> 256-BIT ENCRYPTED
-            </div>
-          </div>
+          <button className="text-white px-14 py-6 font-black rounded-2xl hover:scale-105 transition-transform text-lg shadow-2xl uppercase bg-gradient-to-r from-purple-600 to-blue-600">
+            Get Free Audit
+          </button>
         </div>
       </section>
+    </>
+  );
+};
 
-      {/* FOOTER */}
-      <footer className="py-20 px-8 text-white border-t border-zinc-800" style={{ backgroundColor: '#0A0F1C' }}>
-        <div className="max-w-[1400px] mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 pb-20 border-b border-zinc-800/50">
-            {/* Branding Column */}
-            <div className="space-y-8">
-              <div className="flex items-center gap-4">
-                <img
-                  src="https://infabio.com/infabio-about.png"
-                  alt="Infabio Logo"
-                  className="h-10 object-contain w-auto max-w-[180px]"
-                />
-                <div className="h-8 w-px bg-zinc-800 hidden md:block"></div>
-                <span className="font-black text-lg tracking-tighter uppercase leading-none text-gradient-primary">
-                  Marketing Defense<br />System
-                </span>
-              </div>
-              <p className="text-zinc-400 text-sm leading-relaxed max-w-sm">
-                AI-powered marketing defense system protecting brands from budget waste and maximizing ROI across three continents.
-              </p>
-              <div className="flex gap-4">
-                {[
-                  { icon: Linkedin, url: "#" },
-                  { icon: Twitter, url: "#" },
-                  { icon: Instagram, url: "#" }
-                ].map((social, i) => (
-                  <a key={i} href={social.url} className="w-10 h-10 rounded-lg bg-zinc-800/50 border border-zinc-700/50 flex items-center justify-center hover:bg-zinc-700 transition-all group">
-                    <social.icon size={18} className="text-zinc-400 group-hover:text-white transition-colors" />
-                  </a>
-                ))}
-              </div>
+const MainLayout = ({ children, isMenuOpen, setIsMenuOpen }) => (
+  <div className="min-h-screen bg-white font-sans selection:text-white" style={{ color: COLORS.dark }}>
+    <MobileMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+    {/* ANNOUNCEMENT BAR */}
+    <div className="text-white py-2.5 overflow-hidden flex items-center text-[10px] font-bold tracking-[0.2em] uppercase w-full" style={{ backgroundColor: COLORS.dark }}>
+      <div className="animate-scroll flex whitespace-nowrap min-w-max">
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="flex items-center gap-24 px-12">
+            <span className="opacity-70">ROAS PROTECTION: <span style={{ color: COLORS.teal }}>ACTIVE</span></span>
+            <span className="cursor-pointer hover:text-teal-400 transition-colors">SAVE YOUR AD BUDGET — NEUTRALIZE BOT FRAUD — GROW YOUR BUSINESS →</span>
+            <span className="opacity-70 flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-teal-500 animate-pulse"></div>
+              SYSTEM STATUS: OPTIMIZED
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+    
+    {/* HEADER */}
+    <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-zinc-100 px-8 py-4 flex items-center justify-between">
+      <Link to="/" className="flex items-center gap-3">
+        <img src="https://infabio.com/infabio-logo.png" alt="Infabio" className="h-10 md:h-12 object-contain" />
+      </Link>
+      <div className="flex items-center gap-8">
+        <nav className="hidden lg:flex items-center gap-8 text-[11px] font-bold tracking-widest text-zinc-400 uppercase">
+          <Link to="/" className="hover:text-zinc-900 transition-colors">Framework</Link>
+          <Link to="/" className="hover:text-zinc-900 transition-colors">Intelligence</Link>
+          <Link to="/" className="hover:text-zinc-900 transition-colors">Case Logs</Link>
+        </nav>
+        <div className="h-6 w-px bg-zinc-200 hidden md:block"></div>
+        <button className="text-white px-7 py-3 text-[11px] font-bold tracking-widest rounded-full shadow-lg hover:brightness-110 transition-all uppercase" style={{ backgroundColor: COLORS.purple }}>
+          Get Audit
+        </button>
+        <button onClick={() => setIsMenuOpen(true)} className="p-2 text-zinc-400 hover:text-zinc-900 transition-colors">
+          <Menu size={24} />
+        </button>
+      </div>
+    </nav>
+
+    {children}
+
+    {/* FOOTER */}
+    <footer className="py-20 px-8 text-white border-t border-zinc-800" style={{ backgroundColor: '#0A0F1C' }}>
+      <div className="max-w-[1400px] mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 pb-20 border-b border-zinc-800/50">
+          <div className="space-y-8">
+            <div className="flex items-center gap-4">
+              <img src="https://infabio.com/infabio-about.png" alt="Infabio" className="h-10 object-contain w-auto max-w-[180px]" />
+              <div className="h-8 w-px bg-zinc-800 hidden md:block"></div>
+              <span className="font-black text-lg tracking-tighter uppercase leading-none text-gradient-primary">
+                Marketing Defense<br />System
+              </span>
             </div>
-
-            {/* Services Column */}
-            <div>
-              <h4 className="font-bold text-sm mb-8 tracking-wider">Services</h4>
-              <ul className="space-y-4">
-                {["AI Media Buying", "SEO & Search", "Conversion Optimization", "Social Media", "Email Marketing", "Brand Protection"].map((item, i) => (
-                  <li key={i}>
-                    <a href="#" className="text-zinc-400 hover:text-white text-sm transition-colors">{item}</a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Company Column */}
-            <div>
-              <h4 className="font-bold text-sm mb-8 tracking-wider">Company</h4>
-              <ul className="space-y-4">
-                {["About Us", "Case Studies", "Insights", "Careers", "Contact"].map((item, i) => (
-                  <li key={i}>
-                    <a href="#" className="text-zinc-400 hover:text-white text-sm transition-colors">{item}</a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Global Presence Column */}
-            <div>
-              <h4 className="font-bold text-sm mb-8 tracking-wider">Global Presence</h4>
-              <ul className="space-y-8">
-                {[
-                  { city: "Gurugram, India", detail: "Defense Command Center", color: "#33B6E5" },
-                  { city: "Jaipur, India", detail: "Creative Division", color: "#F2A51A" },
-                  { city: "New York, USA", detail: "Global Expansion HQ", color: "#33B6E5" }
-                ].map((loc, i) => (
-                  <li key={i} className="flex gap-3">
-                    <MapPin size={18} style={{ color: loc.color }} className="shrink-0 mt-1" />
-                    <div>
-                      <div className="text-sm font-bold text-white">{loc.city}</div>
-                      <div className="text-xs text-zinc-500 mt-0.5">{loc.detail}</div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+            <p className="text-zinc-400 text-sm leading-relaxed max-w-sm">
+              AI-powered marketing defense system protecting brands from budget waste.
+            </p>
+            <div className="flex gap-4">
+              {[Linkedin, Twitter, Instagram].map((Icon, i) => (
+                <a key={i} href="#" className="w-10 h-10 rounded-lg bg-zinc-800/50 flex items-center justify-center hover:bg-zinc-700 transition-all">
+                  <Icon size={18} className="text-zinc-400" />
+                </a>
+              ))}
             </div>
           </div>
 
-          <div className="pt-10 flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-zinc-500 font-medium tracking-wider uppercase">
-            <div className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer">
-              <Mail size={14} className="text-teal-500" />
-              <span>hello@infabio.com</span>
-            </div>
-            <div>© 2026 Marketing Defense. All rights reserved</div>
-            <div className="flex gap-8">
-              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-              <a href="#" className="hover:text-white transition-colors">Cookie Policy</a>
-            </div>
+          <div>
+            <h4 className="font-bold text-sm mb-8 tracking-wider">Services</h4>
+            <ul className="space-y-4">
+              {["AI Media Buying", "SEO & Search", "Conversion Optimization", "Social Media", "Email Marketing", "Brand Protection"].map((item, i) => (
+                <li key={i}>
+                  <Link to={`/service/${item.toLowerCase().replace(/ /g, '-')}`} className="text-zinc-400 hover:text-white text-sm transition-colors">{item}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-bold text-sm mb-8 tracking-wider">Company</h4>
+            <ul className="space-y-4">
+              {["About Us", "Case Studies", "Insights", "Careers", "Contact"].map((item, i) => (
+                <li key={i}>
+                  <Link to={`/company/${item.toLowerCase().replace(/ /g, '-')}`} className="text-zinc-400 hover:text-white text-sm transition-colors">{item}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-bold text-sm mb-8 tracking-wider">Global Presence</h4>
+            <ul className="space-y-8">
+              {[{ city: "Gurugram, India", detail: "Command Center", color: "#33B6E5" }, { city: "Jaipur, India", detail: "Creative Division", color: "#F2A51A" }].map((loc, i) => (
+                <li key={i} className="flex gap-3">
+                  <MapPin size={18} style={{ color: loc.color }} className="shrink-0 mt-1" />
+                  <div>
+                    <div className="text-sm font-bold text-white uppercase tracking-wider">{loc.city}</div>
+                    <div className="text-xs text-zinc-500 mt-1">{loc.detail}</div>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
-      </footer>
-    </div>
+
+        <div className="pt-10 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] text-zinc-500 font-black tracking-[0.3em] uppercase">
+          <div className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer">
+            <Mail size={14} className="text-teal-500" />
+            <span>hello@infabio.com</span>
+          </div>
+          <div>© 2026 Marketing Defense. All rights reserved</div>
+          <div className="flex gap-8">
+            <a href="#" className="hover:text-white transition-colors">Privacy</a>
+            <a href="#" className="hover:text-white transition-colors">Terms</a>
+            <a href="#" className="hover:text-white transition-colors">Cookies</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+);
+
+const App = () => {
+  const [activeCase, setActiveCase] = useState(0);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const caseStudies = [
+    {
+      client: "NEO-FINANCE GLOBAL",
+      title: "Neutralizing $4M Annual Ad Waste",
+      problem: "Massive bot-driven lead inflation causing sales team friction and budget drainage.",
+      solution: "Deployed MDS Bot-Shield and Neural Bidding to filter traffic at the pre-click layer.",
+      results: "+42% SQL quality improvement; -28% CPA within 60 days.",
+      accent: COLORS.purple,
+      image: "https://totempool.com/wp-content/uploads/2022/07/case-study_f4d16a7af18e4599d24d8120fd0d4c66_2000-930x620.jpg"
+    },
+    {
+      client: "AXON E-COMMERCE",
+      title: "Scaling Beyond the $50M Ceiling",
+      problem: "Plateaued ROAS due to cross-channel attribution blindness and audience saturation.",
+      solution: "Implemented MDS Attribution Engine to re-allocate spend toward high-LTV signals.",
+      results: "3.2x ROAS increase; Scaled monthly spend from $1.2M to $4.5M profitably.",
+      accent: COLORS.blue,
+      image: "https://graphicfolks.com/wp-content/uploads/2025/12/powerful-marketing-case-studies.jpg"
+    },
+    {
+      client: "QUANTUM SAAS",
+      title: "Winning the Bidding War",
+      problem: "Aggressive competitors driving up CPCs by 200% on core keyword clusters.",
+      solution: "MDS Stealth Bidding protocols used to capture low-intent volume the competition ignored.",
+      results: "-60% CPC reduction; 15% increase in market share dominance.",
+      accent: COLORS.teal,
+      image: "https://tse1.mm.bing.net/th/id/OIP.hFVZ7O3dgQ7km-T-OqV43QHaE8?rs=1&pid=ImgDetMain&o=7&rm=3"
+    }
+  ];
+
+  return (
+    <Router>
+      <ScrollToTop />
+      <MainLayout isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen}>
+        <Routes>
+          <Route path="/" element={<Home activeCase={activeCase} setActiveCase={setActiveCase} caseStudies={caseStudies} />} />
+          <Route path="/service/:id" element={<ServicePage />} />
+          <Route path="/company/:id" element={<CompanyPage />} />
+        </Routes>
+      </MainLayout>
+    </Router>
   );
 };
 
