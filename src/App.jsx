@@ -152,9 +152,6 @@ const HeroDashboard = () => {
 
 const MobileMenu = ({ isOpen, onClose }) => {
   const links = [
-    { name: "Framework", href: "/" },
-    { name: "Intelligence", href: "/" },
-    { name: "Case Logs", href: "/" },
     { name: "Services", sub: ["AI Media Buying", "SEO & Search", "Conversion Optimization", "Social Media", "Email Marketing", "Brand Protection"] },
     { name: "Company", sub: ["About Us", "Case Studies", "Insights", "Careers", "Contact"] }
   ];
@@ -581,11 +578,6 @@ const MainLayout = ({ children, isMenuOpen, setIsMenuOpen }) => (
         <img src="https://infabio.com/infabio-logo.png" alt="Infabio" className="h-10 md:h-12 object-contain" />
       </Link>
       <div className="flex items-center gap-8">
-        <nav className="hidden lg:flex items-center gap-8 text-[11px] font-bold tracking-widest text-zinc-400 uppercase">
-          <Link to="/" className="hover:text-zinc-900 transition-colors">Framework</Link>
-          <Link to="/" className="hover:text-zinc-900 transition-colors">Intelligence</Link>
-          <Link to="/" className="hover:text-zinc-900 transition-colors">Case Logs</Link>
-        </nav>
         <div className="h-6 w-px bg-zinc-200 hidden md:block"></div>
         <button className="text-white px-7 py-3 text-[11px] font-bold tracking-widest rounded-full shadow-lg hover:brightness-110 transition-all uppercase" style={{ backgroundColor: COLORS.purple }}>
           Get Audit
