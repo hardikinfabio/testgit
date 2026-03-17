@@ -494,10 +494,10 @@ const App = () => {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-12">
           {[
-            { name: "MARCUS CHEN", role: "DEFENSE ARCHITECT", color: COLORS.purple },
-            { name: "SARA VOLKOV", role: "INTEL COMMANDER", color: COLORS.blue },
+            { name: "Anchal", role: "DEFENSE ARCHITECT", color: COLORS.purple },
+            { name: "Vikash", role: "INTEL COMMANDER", color: COLORS.blue },
             { name: "ELIAS VANCE", role: "AI ENGINEER", color: COLORS.teal },
-            { name: "ALINA JENSEN", role: "OPS DIRECTOR", color: COLORS.pink }
+            { name: "Chhavi", role: "OPS DIRECTOR", color: COLORS.pink }
           ].map((member, i) => (
             <div key={i} className="group cursor-crosshair">
               <div className="relative mb-8 bg-zinc-50 rounded-[2rem] aspect-[4/5] overflow-hidden border border-zinc-100 transition-all group-hover:shadow-2xl">
