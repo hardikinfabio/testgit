@@ -496,7 +496,7 @@ const App = () => {
           {[
             { name: "Anchal", role: "DEFENSE ARCHITECT", color: COLORS.purple },
             { name: "Vikash", role: "INTEL COMMANDER", color: COLORS.blue },
-            { name: "ELIAS VANCE", role: "AI ENGINEER", color: COLORS.teal },
+            { name: "OP", role: "AI ENGINEER", color: COLORS.teal },
             { name: "Chhavi", role: "OPS DIRECTOR", color: COLORS.pink }
           ].map((member, i) => (
             <div key={i} className="group cursor-crosshair">
