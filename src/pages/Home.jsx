@@ -238,17 +238,25 @@ const Home = ({ activeCase, setActiveCase, caseStudies }) => {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-12">
           {[
-            { name: "MARCUS CHEN", role: "DEFENSE ARCHITECT", color: COLORS.purple },
-            { name: "SARA VOLKOV", role: "INTEL COMMANDER", color: COLORS.blue },
-            { name: "ELIAS VANCE", role: "AI ENGINEER", color: COLORS.teal },
-            { name: "ALINA JENSEN", role: "OPS DIRECTOR", color: COLORS.pink }
+            { name: "ANCHAL", role: "DEFENSE ARCHITECT", color: COLORS.teal, image: "/Anchal.jpeg" },
+            { name: "VIKASH", role: "INTEL COMMANDER", color: COLORS.blue, image: "/Vikash.png" },
+            { name: "CHHAVI", role: "OPS DIRECTOR", color: COLORS.purple, image: "/Chhavi.jpeg" },
+            { name: "TEAM MEMBER", role: "AI ENGINEER", color: COLORS.pink }
           ].map((member, i) => (
             <div key={i} className="group cursor-crosshair">
               <div className="relative mb-8 bg-zinc-50 rounded-[2rem] aspect-[4/5] overflow-hidden border border-zinc-100 transition-all group-hover:shadow-2xl">
-                <div className="absolute inset-0 flex items-center justify-center grayscale group-hover:grayscale-0 transition-all opacity-20 group-hover:opacity-40">
-                  <User size={100} />
-                </div>
-                <div className="absolute top-6 left-6 flex gap-1">
+                {member.image ? (
+                  <img
+                    src={member.image}
+                    alt={member.name}
+                    className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center grayscale group-hover:grayscale-0 transition-all opacity-20 group-hover:opacity-40">
+                    <User size={100} />
+                  </div>
+                )}
+                <div className="absolute top-6 left-6 flex gap-1 z-10">
                   <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: member.color }}></div>
                   <div className="w-1.5 h-1.5 rounded-full bg-zinc-200"></div>
                 </div>
