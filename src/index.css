@@ -1,4 +1,75 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --color-purple: #8A3FA0;
+  --color-blue: #33B6E5;
+  --color-teal: #34BFA3;
+  --color-orange: #F2A51A;
+  --color-pink: #E56E6B;
+  --color-dark: #1F2937;
+}
+
+.selection\:bg-purple-custom::selection {
+  background-color: var(--color-purple);
+}
+
+.bg-gradient-primary {
+  background: linear-gradient(135deg, var(--color-purple), var(--color-blue));
+}
+
+.text-gradient-primary {
+  background: linear-gradient(135deg, var(--color-purple), var(--color-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-scroll {
+  animation: scroll 30s linear infinite;
+}
+
+.animate-scroll:hover {
+  animation-play-state: paused;
+}
+
+@keyframes rotate-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.border-animation-container {
+  position: relative;
+  border-radius: 1.5rem;
+  padding: 2px;
+  overflow: hidden;
+  background: transparent;
+  transition: all 0.3s ease;
+}
+
+.border-animation-container::before {
+  content: '';
+  position: absolute;
+  inset: -100%;
+  background: conic-gradient(from 0deg, transparent 60%, var(--border-glow, #33B6E5));
+  animation: rotate-slow 4s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+.border-animation-container:hover::before {
+  opacity: 1;
+}
+
+.border-animation-content {
+  position: relative;
+  z-index: 10;
+  height: 100%;
+  width: 100%;
+}
