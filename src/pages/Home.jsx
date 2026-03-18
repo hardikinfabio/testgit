@@ -240,8 +240,6 @@ const Home = ({ activeCase, setActiveCase, caseStudies }) => {
           {[
             { name: "ANCHAL", role: "DEFENSE ARCHITECT", color: COLORS.teal, image: "/Anchal.jpeg" },
             { name: "VIKASH", role: "INTEL COMMANDER", color: COLORS.blue, image: "/Vikash.png" },
-            { name: "CHHAVI", role: "OPS DIRECTOR", color: COLORS.purple, image: "/Chhavi.jpeg" },
-            { name: "TEAM MEMBER", role: "AI ENGINEER", color: COLORS.pink }
           ].map((member, i) => (
             <div key={i} className="group cursor-crosshair">
               <div className="relative mb-8 bg-zinc-50 rounded-[2rem] aspect-[4/5] overflow-hidden border border-zinc-100 transition-all group-hover:shadow-2xl">
