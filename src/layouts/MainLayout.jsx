@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, Linkedin, Twitter, Instagram, MapPin, Mail } from 'lucide-react';
 import MobileMenu from '../components/MobileMenu';
+import AuditModal from '../components/AuditModal';
 import { COLORS } from '../constants/colors';
 
-const MainLayout = ({ children, isMenuOpen, setIsMenuOpen }) => (
+const MainLayout = ({ children, isMenuOpen, setIsMenuOpen }) => {
+  const [isAuditOpen, setIsAuditOpen] = useState(false);
+  return (
   <div className="min-h-screen bg-white font-sans selection:text-white" style={{ color: COLORS.dark }}>
     <MobileMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+    <AuditModal isOpen={isAuditOpen} onClose={() => setIsAuditOpen(false)} />
     {/* ANNOUNCEMENT BAR */}
     <div className="text-white py-2.5 overflow-hidden flex items-center text-[10px] font-bold tracking-[0.2em] uppercase w-full" style={{ backgroundColor: COLORS.dark }}>
       <div className="animate-scroll flex whitespace-nowrap min-w-max">
@@ -30,7 +34,7 @@ const MainLayout = ({ children, isMenuOpen, setIsMenuOpen }) => (
       </Link>
       <div className="flex items-center gap-8">
         <div className="h-6 w-px bg-zinc-200 hidden md:block"></div>
-        <button className="text-white px-7 py-3 text-[11px] font-bold tracking-widest rounded-full shadow-lg hover:brightness-110 transition-all uppercase" style={{ backgroundColor: COLORS.purple }}>
+        <button onClick={() => setIsAuditOpen(true)} className="text-white px-7 py-3 text-[11px] font-bold tracking-widest rounded-full shadow-lg hover:brightness-110 transition-all uppercase" style={{ backgroundColor: COLORS.purple }}>
           Get Audit
         </button>
         <button onClick={() => setIsMenuOpen(true)} className="p-2 text-zinc-400 hover:text-zinc-900 transition-colors">
@@ -57,11 +61,15 @@ const MainLayout = ({ children, isMenuOpen, setIsMenuOpen }) => (
               AI-powered marketing defense system protecting brands from budget waste.
             </p>
             <div className="flex gap-4">
-              {[Linkedin, Twitter, Instagram].map((Icon, i) => (
-                <a key={i} href="#" className="w-10 h-10 rounded-lg bg-zinc-800/50 flex items-center justify-center hover:bg-zinc-700 transition-all">
-                  <Icon size={18} className="text-zinc-400" />
-                </a>
-              ))}
+              <a href="https://www.linkedin.com/company/infabio/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-zinc-800/50 flex items-center justify-center hover:bg-zinc-700 transition-all">
+                <Linkedin size={18} className="text-zinc-400" />
+              </a>
+              <a href="https://x.com/TheInfabio" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-zinc-800/50 flex items-center justify-center hover:bg-zinc-700 transition-all">
+                <Twitter size={18} className="text-zinc-400" />
+              </a>
+              <a href="https://www.instagram.com/theinfabio" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-zinc-800/50 flex items-center justify-center hover:bg-zinc-700 transition-all">
+                <Instagram size={18} className="text-zinc-400" />
+              </a>
             </div>
           </div>
 
@@ -70,7 +78,7 @@ const MainLayout = ({ children, isMenuOpen, setIsMenuOpen }) => (
             <ul className="space-y-4">
               {["AI Media Buying", "SEO & Search", "Conversion Optimization", "Social Media", "Email Marketing", "Brand Protection"].map((item, i) => (
                 <li key={i}>
-                  <Link to={`/service/${item.toLowerCase().replace(/ /g, '-')}`} className="text-zinc-400 hover:text-white text-sm transition-colors">{item}</Link>
+                  <Link to={`/service/${item.toLowerCase().replace(/[\s&]+/g, '-').replace(/-+/g, '-')}`} className="text-zinc-400 hover:text-white text-sm transition-colors">{item}</Link>
                 </li>
               ))}
             </ul>
@@ -118,6 +126,7 @@ const MainLayout = ({ children, isMenuOpen, setIsMenuOpen }) => (
       </div>
     </footer>
   </div>
-);
+  );
+};
 
 export default MainLayout;

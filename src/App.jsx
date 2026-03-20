@@ -25,7 +25,7 @@ function App() {
       problem: "Attribution blindness causing overspend on non-performing signals.",
       results: "Saved $1.2M in annual waste via Neural Attribution.",
       accent: "#6B46C1",
-      image: "https://images.unsplash.com/photo-1551288049-bbdac8a28a1e?q=80&w=2070&auto=format&fit=crop"
+      image: "https://tse1.mm.bing.net/th/id/OIP.3xwt2G9KD3DYBUrgh8aqKwHaEK?rs=1&pid=ImgDetMain&o=7&rm=3"
     }
   ];
 

@@ -235,38 +235,55 @@ const Home = ({ activeCase, setActiveCase, caseStudies }) => {
             <p className="text-xl text-zinc-500 font-medium">A clandestine unit of data scientists and media architects dedicated to your dominance.</p>
           </div>
         </div>
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-12">
+        <div className="grid md:grid-cols-3 gap-12">
           {[
-            { name: "ANCHAL", role: "DEFENSE ARCHITECT", color: COLORS.teal, image: "/Anchal.jpeg" },
-            { name: "VIKASH", role: "INTEL COMMANDER", color: COLORS.blue, image: "/Vikash.png" },
+            { name: "ANCHAL", role: "Client Service & Project Manager", color: COLORS.teal, image: "/Anchal.jpeg", id: "U-087", clearance: "LVL 9", bio: "Managing client relationships and ensuring seamless project delivery from brief to final execution." },
+            { name: "VIKASH", role: "Performance & Marketing Manager", color: COLORS.blue, image: "/Vikash.png", id: "U-109", clearance: "OVERSEER", bio: "Driving high-performance ad campaigns and engineering growth strategies backed by real-time data intelligence." },
+            { name: "CHHAVI", role: "Sales & QC Manager", color: COLORS.purple, image: "/Chhavi.jpeg", id: "U-042", clearance: "LVL 9", bio: "Leading new client acquisition while enforcing rigorous quality standards across every campaign output." },
           ].map((member, i) => (
-            <div key={i} className="group cursor-crosshair">
-              <div className="relative mb-8 bg-zinc-50 rounded-[2rem] aspect-[4/5] overflow-hidden border border-zinc-100 transition-all group-hover:shadow-2xl">
-                {member.image ? (
+            <div key={i} className="border-animation-container group" style={{ '--border-glow': member.color }}>
+              <div className="border-animation-content bg-white p-4 rounded-[1.4rem] border border-zinc-100 flex flex-col h-full overflow-hidden">
+                <div className="relative mb-6 rounded-2xl aspect-[4/5] overflow-hidden group/img">
+                  {/* Status Badge */}
+                  <div className="absolute top-4 right-4 z-20 flex items-center gap-1.5 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
+                    <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: member.color }}></div>
+                    <span className="text-[7px] font-black text-white/90 tracking-widest uppercase">STATUS: ACTIVE</span>
+                  </div>
+
+                  {/* Identification Overlay */}
+                  <div className="absolute bottom-4 left-4 z-20 flex flex-col gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <span className="text-[8px] font-mono text-white/60 bg-black/40 backdrop-blur-sm px-2 py-0.5 rounded-sm">ID: {member.id}</span>
+                    <span className="text-[8px] font-mono text-white/60 bg-black/40 backdrop-blur-sm px-2 py-0.5 rounded-sm">CLEARANCE: {member.clearance}</span>
+                  </div>
+
+                  {/* Scanning Line Animation */}
+                  <div className="absolute inset-0 z-10 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    <div className="w-full h-[2px] bg-white/40 shadow-[0_0_15px_white] absolute top-[-10%] animate-[scan_3s_linear_infinite]"></div>
+                  </div>
+
                   <img
                     src={member.image}
                     alt={member.name}
-                    className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                    className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700 ease-in-out"
                   />
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center grayscale group-hover:grayscale-0 transition-all opacity-20 group-hover:opacity-40">
-                    <User size={100} />
+
+                  {/* Technical Overlay Dots */}
+                  <div className="absolute inset-0 z-10 opacity-0 group-hover:opacity-30 transition-opacity duration-500 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
+                </div>
+
+                <div className="px-2 pb-2">
+                  <div className="flex justify-between items-start mb-2">
+                    <h4 className="text-2xl font-black tracking-tighter leading-none">{member.name}</h4>
+                    <Fingerprint size={16} className="text-zinc-300" />
                   </div>
-                )}
-                <div className="absolute top-6 left-6 flex gap-1 z-10">
-                  <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: member.color }}></div>
-                  <div className="w-1.5 h-1.5 rounded-full bg-zinc-200"></div>
+                  <div className="text-[10px] font-bold tracking-[0.4em] uppercase mb-4 py-1 px-2 border-l-2 inline-block" style={{ color: member.color, borderColor: member.color }}>{member.role}</div>
+                  <p className="text-xs text-zinc-500 leading-relaxed font-medium italic border-t border-zinc-50 pt-4">"{member.bio}"</p>
                 </div>
               </div>
-              <h4 className="text-xl font-black tracking-tight mb-1">{member.name}</h4>
-              <div className="text-[10px] font-bold tracking-[0.3em] uppercase mb-4" style={{ color: member.color }}>{member.role}</div>
-              <p className="text-sm text-zinc-500 leading-relaxed font-medium italic">"Deciphering market volatility with algorithmic precision."</p>
             </div>
           ))}
         </div>
       </section>
-
       {/* FINAL CALL TO ACTION */}
       <section className="py-40 px-8 text-center relative overflow-hidden" style={{ backgroundColor: COLORS.dark }}>
         <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none" style={{ background: `radial-gradient(circle at center, ${COLORS.blue}, transparent)` }}></div>

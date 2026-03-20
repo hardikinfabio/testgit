@@ -30,6 +30,11 @@
   100% { transform: translateX(-50%); }
 }
 
+@keyframes scan {
+  0% { top: -10%; }
+  100% { top: 110%; }
+}
+
 .animate-scroll {
   animation: scroll 30s linear infinite;
 }
